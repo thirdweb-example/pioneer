@@ -71,10 +71,18 @@ public class TutorialManager : MonoBehaviour
             await BlockchainManager.SmartWallet.GetPersonalWallet()
         ).GetAddress();
 
-        var maybeEns = await Utils.GetENSFromAddress(
-            ThirdwebManager.Instance.Client,
-            externalWalletAddress
-        );
+        string maybeEns;
+        try
+        {
+            maybeEns = await Utils.GetENSFromAddress(
+                ThirdwebManager.Instance.Client,
+                externalWalletAddress
+            );
+        }
+        catch
+        {
+            maybeEns = externalWalletAddress;
+        }
 
         // Display MetaMask address since that's what we'll use as final asset destination in this example
         PostConnectText.text = $"Welcome, {maybeEns}";
